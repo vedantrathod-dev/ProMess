@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 import {
   QrCode,
   Camera,
@@ -13,7 +14,8 @@ import {
   Clock,
   ArrowRight,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  SwitchCamera
 } from 'lucide-react';
 import { verifyAndCheckIn, getStore, subscribeToStore, getTodayDateString } from '../services/store';
 
@@ -27,8 +29,14 @@ export function CounterScanner({ currentUser, onNavigate }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [cameraError, setCameraError] = useState('');
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
+  const [availableCameras, setAvailableCameras] = useState([]);
+  const [currentCameraIndex, setCurrentCameraIndex] = useState(0);
+
+  const qrScannerRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const isProcessingRef = useRef(false);
+  const lastScannedTokenRef = useRef('');
+  const lastScannedTimeRef = useRef(0);
 
   useEffect(() => {
     return subscribeToStore((newStore) => setStore(newStore));
@@ -42,6 +50,19 @@ export function CounterScanner({ currentUser, onNavigate }) {
     } else {
       setSelectedSession('lunch');
     }
+  }, []);
+
+  // Detect available cameras on mount
+  useEffect(() => {
+    Html5Qrcode.getCameras()
+      .then((cameras) => {
+        if (cameras && cameras.length > 0) {
+          setAvailableCameras(cameras);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not enumerate cameras on load:', err);
+      });
   }, []);
 
   // Web Audio Chimes
@@ -78,11 +99,19 @@ export function CounterScanner({ currentUser, onNavigate }) {
 
   // Perform pass check-in transaction
   const handleVerifyToken = (tokenToVerify) => {
-    if (isProcessing) return;
+    if (isProcessingRef.current) return;
     setIsProcessing(true);
+    isProcessingRef.current = true;
+
+    // Clean up input token (handle embedded MESSPASS:... or plain tokens)
+    let cleanToken = (tokenToVerify || '').trim();
+    const match = cleanToken.match(/MESSPASS:[a-zA-Z0-9_-]+/);
+    if (match) {
+      cleanToken = match[0];
+    }
 
     const result = verifyAndCheckIn({
-      rawToken: tokenToVerify,
+      rawToken: cleanToken,
       mealSession: selectedSession,
       verifiedBy: currentUser?.full_name || 'Counter Operator',
       verificationMethod: isCameraActive ? 'camera_qr' : 'manual_terminal'
@@ -94,38 +123,203 @@ export function CounterScanner({ currentUser, onNavigate }) {
     // Auto-rearm after 1.8 seconds per Section 9 specs
     setTimeout(() => {
       setIsProcessing(false);
+      isProcessingRef.current = false;
     }, 1800);
   };
 
-  // Camera handling
-  const startCamera = async () => {
-    setCameraError('');
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
-      });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
-      setIsCameraActive(true);
-    } catch (err) {
-      setCameraError('Camera access denied or unavailable. Use manual token or student search fallback.');
-      setIsCameraActive(false);
+  // Switch between front/back or external cameras
+  const handleSwitchCamera = () => {
+    if (availableCameras.length > 1) {
+      setCurrentCameraIndex((prev) => (prev + 1) % availableCameras.length);
     }
   };
 
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
+  // Stop camera helper
+  const stopCamera = async () => {
+    if (qrScannerRef.current) {
+      try {
+        if (qrScannerRef.current.isScanning) {
+          await qrScannerRef.current.stop();
+        }
+        qrScannerRef.current.clear();
+      } catch (err) {
+        console.warn('Error stopping QR scanner:', err);
+      }
+      qrScannerRef.current = null;
     }
     setIsCameraActive(false);
   };
 
+  // Scan QR from an uploaded image file (fallback & screenshot testing)
+  const handleFileScan = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCameraError('');
+
+    try {
+      if (isCameraActive) {
+        await stopCamera();
+        await new Promise((r) => setTimeout(r, 200));
+      }
+
+      // Check for reader container
+      const container = document.getElementById('qr-reader-container');
+      if (!container) {
+        throw new Error('Scanner container not ready');
+      }
+
+      const tempScanner = new Html5Qrcode('qr-reader-container');
+      const decodedText = await tempScanner.scanFile(file, false);
+      try {
+        tempScanner.clear();
+      } catch (cErr) {}
+
+      if (decodedText) {
+        handleVerifyToken(decodedText);
+      }
+    } catch (err) {
+      console.warn('QR Image Scan failed:', err);
+      setCameraError('No readable QR code found in this image. Please ensure the QR code is in focus.');
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  // Lifecycle for starting and stopping the live Html5Qrcode scanner
   useEffect(() => {
-    return () => stopCamera();
+    let isMounted = true;
+
+    const initScanner = async () => {
+      if (!isCameraActive) return;
+
+      try {
+        setCameraError('');
+
+        // Ensure previous scanner instance is cleared
+        if (qrScannerRef.current) {
+          try {
+            if (qrScannerRef.current.isScanning) {
+              await qrScannerRef.current.stop();
+            }
+            qrScannerRef.current.clear();
+          } catch (e) {}
+          qrScannerRef.current = null;
+        }
+
+        // Make sure container exists in DOM
+        const container = document.getElementById('qr-reader-container');
+        if (!container) return;
+
+        // Fetch cameras if not loaded yet
+        let cameras = availableCameras;
+        if (!cameras || cameras.length === 0) {
+          try {
+            cameras = await Html5Qrcode.getCameras();
+            if (isMounted && cameras && cameras.length > 0) {
+              setAvailableCameras(cameras);
+            }
+          } catch (camErr) {
+            console.warn('Could not enumerate cameras:', camErr);
+          }
+        }
+
+        const scanner = new Html5Qrcode('qr-reader-container');
+        qrScannerRef.current = scanner;
+
+        const qrConfig = {
+          fps: 15,
+          qrbox: (viewfinderWidth, viewfinderHeight) => {
+            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            const boxSize = Math.max(160, Math.floor(minEdge * 0.72));
+            return { width: boxSize, height: boxSize };
+          },
+          aspectRatio: 1.0,
+          disableFlip: false
+        };
+
+        const onScanSuccess = (decodedText) => {
+          if (!decodedText) return;
+          if (isProcessingRef.current) return;
+
+          const now = Date.now();
+          // Avoid duplicate rapid triggers for identical token within 3 seconds
+          if (decodedText === lastScannedTokenRef.current && (now - lastScannedTimeRef.current) < 3000) {
+            return;
+          }
+
+          lastScannedTokenRef.current = decodedText;
+          lastScannedTimeRef.current = now;
+          handleVerifyToken(decodedText);
+        };
+
+        const onScanFailure = () => {
+          // Regular continuous frame scanning parse notices - ignore
+        };
+
+        // Determine camera target (prefer selected camera deviceId, or back camera)
+        let cameraTarget = { facingMode: 'environment' };
+        if (cameras && cameras.length > 0) {
+          const selectedCam = cameras[currentCameraIndex % cameras.length];
+          if (selectedCam?.id) {
+            cameraTarget = selectedCam.id;
+          }
+        }
+
+        try {
+          await scanner.start(cameraTarget, qrConfig, onScanSuccess, onScanFailure);
+        } catch (startErr) {
+          console.warn('Selected camera target failed, falling back to user facing camera:', startErr);
+          // Fallback to user facing camera
+          await scanner.start({ facingMode: 'user' }, qrConfig, onScanSuccess, onScanFailure);
+        }
+
+      } catch (err) {
+        console.error('QR Scanner init failure:', err);
+        if (isMounted) {
+          setCameraError(
+            err?.message ||
+            'Camera access denied or unavailable. Please enable camera permissions in your browser or use QR Image Upload.'
+          );
+          setIsCameraActive(false);
+        }
+      }
+    };
+
+    if (isCameraActive) {
+      initScanner();
+    } else {
+      if (qrScannerRef.current) {
+        const s = qrScannerRef.current;
+        qrScannerRef.current = null;
+        if (s.isScanning) {
+          s.stop().then(() => s.clear()).catch(() => {});
+        } else {
+          try { s.clear(); } catch (e) {}
+        }
+      }
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isCameraActive, currentCameraIndex]);
+
+  // Clean up scanner on unmount
+  useEffect(() => {
+    return () => {
+      if (qrScannerRef.current) {
+        const s = qrScannerRef.current;
+        qrScannerRef.current = null;
+        if (s.isScanning) {
+          s.stop().catch(() => {});
+        }
+        try {
+          s.clear();
+        } catch (e) {}
+      }
+    };
   }, []);
 
   const todayStr = getTodayDateString();
@@ -267,29 +461,66 @@ export function CounterScanner({ currentUser, onNavigate }) {
               padding: '24px',
               marginBottom: '20px'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span className="badge badge-live">
-                  CAMERA SCANNER FEED
-                </span>
-                <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className={isCameraActive ? "badge badge-live" : "badge"} style={{ backgroundColor: isCameraActive ? undefined : 'rgba(232, 214, 173, 0.15)', color: isCameraActive ? undefined : 'var(--color-sand-200)' }}>
+                    {isCameraActive ? '● CAMERA SCANNER ACTIVE' : 'CAMERA SCANNER STANDBY'}
+                  </span>
+                  {isProcessing && (
+                    <span className="badge" style={{ backgroundColor: 'var(--color-sand-200)', color: '#15130F', fontWeight: 800 }}>
+                      VERIFYING PASS...
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  {isCameraActive && availableCameras.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={handleSwitchCamera}
+                      className="btn btn-outline btn-sm"
+                      title="Switch between front/back or external camera"
+                      style={{ padding: '6px 10px', fontSize: '0.78rem' }}
+                    >
+                      <SwitchCamera size={14} /> SWITCH CAM
+                    </button>
+                  )}
+
                   {!isCameraActive ? (
-                    <button onClick={startCamera} className="btn btn-primary btn-sm">
+                    <button type="button" onClick={() => setIsCameraActive(true)} className="btn btn-primary btn-sm">
                       <Camera size={15} /> START CAMERA
                     </button>
                   ) : (
-                    <button onClick={stopCamera} className="btn btn-dark btn-sm">
+                    <button type="button" onClick={stopCamera} className="btn btn-dark btn-sm">
                       STOP CAMERA
                     </button>
                   )}
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="btn btn-outline btn-sm"
+                    title="Upload or scan a saved QR code image or screenshot"
+                    style={{ padding: '6px 10px', fontSize: '0.78rem' }}
+                  >
+                    <Upload size={14} /> SCAN IMAGE
+                  </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleFileScan}
+                  />
                 </div>
               </div>
 
               {/* Viewfinder Window */}
               <div style={{
-                height: '240px',
+                minHeight: '260px',
                 backgroundColor: '#000000',
                 borderRadius: 'var(--radius-sm)',
-                border: '2px dashed var(--color-red-600)',
+                border: isCameraActive ? '2px solid var(--color-red-600)' : '2px dashed var(--color-line-gold)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -297,40 +528,84 @@ export function CounterScanner({ currentUser, onNavigate }) {
                 position: 'relative',
                 overflow: 'hidden'
               }}>
-                <video
-                  ref={videoRef}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: isCameraActive ? 'block' : 'none' }}
-                  playsInline
-                  muted
+                {/* Container where Html5Qrcode attaches its video and canvas */}
+                <div
+                  id="qr-reader-container"
+                  style={{
+                    width: '100%',
+                    display: isCameraActive ? 'block' : 'none'
+                  }}
                 />
 
                 {!isCameraActive && (
-                  <div style={{ textAlign: 'center', padding: '20px' }}>
-                    <Camera size={40} color="var(--color-sand-200)" style={{ marginBottom: '8px' }} />
-                    <div style={{ fontSize: '0.88rem', color: 'var(--color-sand-200)' }}>
-                      Click "Start Camera" to scan student QR passes in real time
+                  <div style={{ textAlign: 'center', padding: '24px 20px' }}>
+                    <div style={{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(232, 214, 173, 0.08)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 12px'
+                    }}>
+                      <Camera size={32} color="var(--color-sand-200)" />
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', color: 'var(--color-cream-50)', marginBottom: '4px' }}>
+                      READY TO SCAN QR PASSES
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--color-sand-200)', maxWidth: '300px', margin: '0 auto' }}>
+                      Click <strong>"Start Camera"</strong> to scan physical or mobile QR passes live, or click <strong>"Scan Image"</strong> to upload a pass screenshot.
                     </div>
                     {cameraError && (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--color-red-500)', marginTop: '8px' }}>
+                      <div style={{
+                        fontSize: '0.8rem',
+                        color: '#FF8A80',
+                        marginTop: '12px',
+                        backgroundColor: 'rgba(211, 47, 47, 0.2)',
+                        border: '1px solid rgba(255, 138, 128, 0.3)',
+                        padding: '8px 14px',
+                        borderRadius: '4px',
+                        maxWidth: '340px'
+                      }}>
                         {cameraError}
                       </div>
                     )}
                   </div>
                 )}
 
-                {/* Laser scanline effect */}
+                {/* Laser scanline animation overlay when camera is active */}
                 {isCameraActive && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: 0,
-                    right: 0,
-                    height: '2px',
-                    backgroundColor: 'var(--color-red-500)',
-                    boxShadow: '0 0 10px #DF171B'
-                  }} />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '2px',
+                      backgroundColor: 'var(--color-red-500)',
+                      boxShadow: '0 0 12px #DF171B, 0 0 24px #DF171B',
+                      animation: 'scannerLaser 2.2s ease-in-out infinite',
+                      pointerEvents: 'none',
+                      zIndex: 10
+                    }}
+                  />
                 )}
               </div>
+
+              {isCameraActive && (
+                <div style={{
+                  marginTop: '10px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  fontSize: '0.78rem',
+                  color: 'var(--color-sand-200)'
+                }}>
+                  <span>Hold student QR pass steadily inside the viewfinder</span>
+                  <span style={{ color: '#81C784' }}>● Scanner Active (15 FPS)</span>
+                </div>
+              )}
             </div>
 
             {/* Quick Demo Scans & USB Barcode Input */}

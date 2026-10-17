@@ -721,6 +721,53 @@ img, svg, video, canvas {
   }
 }
 
+/* QR Scanner Container & Viewfinder Styling */
+#qr-reader-container {
+  width: 100% !important;
+  background-color: #000000 !important;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(232, 214, 173, 0.25);
+}
+
+#qr-reader-container video {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 290px;
+  object-fit: cover !important;
+  border-radius: var(--radius-sm);
+}
+
+#qr-reader-container img {
+  max-height: 250px;
+  object-fit: contain;
+}
+
+#qr-reader-container__scan_region {
+  border: 2px dashed var(--color-red-500) !important;
+  border-radius: 8px;
+}
+
+#qr-reader-container__dashboard_section {
+  padding: 8px !important;
+}
+
+@keyframes scannerLaser {
+  0% {
+    top: 5%;
+    opacity: 0.8;
+  }
+  50% {
+    top: 92%;
+    opacity: 1;
+  }
+  100% {
+    top: 5%;
+    opacity: 0.8;
+  }
+}
+
 /* 5. Ultra-Small Devices (<= 360px - e.g. iPhone SE 1st gen, Galaxy Fold outer screen) */
 @media (max-width: 360px) {
   .container {
@@ -735,4 +782,5 @@ img, svg, video, canvas {
     font-size: 1.35rem !important;
   }
 }
+
 

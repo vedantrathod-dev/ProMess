@@ -444,13 +444,32 @@ export function verifyAndCheckIn({ rawToken, mealSession, verifiedBy, verificati
   }
 
   // 1. Resolve Dining Pass
-  const pass = state.dining_passes.find(p => p.token === token);
+  let pass = state.dining_passes.find(p => p.token === token);
+  if (!pass) {
+    // Check if token contains an embedded MESSPASS:... substring
+    const match = token.match(/MESSPASS:[a-zA-Z0-9_-]+/);
+    if (match) {
+      pass = state.dining_passes.find(p => p.token === match[0]);
+    }
+  }
+  if (!pass) {
+    // Fallback: check if the scanned token is a student code, mobile, or student ID
+    const matchedUser = state.users.find(
+      u => (u.student_code && u.student_code.toLowerCase() === token.toLowerCase()) ||
+           u.id === token ||
+           u.mobile === token
+    );
+    if (matchedUser) {
+      pass = state.dining_passes.find(p => p.student_id === matchedUser.id && p.is_active);
+    }
+  }
+
   if (!pass) {
     return {
       status: 'error',
       code: 'PASS_NOT_FOUND',
       title: 'Unrecognized Pass',
-      message: 'This QR code is not associated with any ProMess pass.'
+      message: 'This QR code is not associated with any active ProMess dining pass.'
     };
   }
 
