@@ -1,0 +1,738 @@
+/* ProMess Master Design System — Bold Editorial Campus Dining Platform */
+/* Inspired faithfully by the Tamizhan Mess restaurant case study reference */
+
+:root {
+  /* Brand Palette from Prompt Specification */
+  --color-maroon-950: #210604;
+  --color-maroon-900: #350907;
+  --color-maroon-850: #420b08;
+  --color-maroon-800: #520f0c;
+  --color-red-700: #A90005;
+  --color-red-600: #C5090D;
+  --color-red-500: #DF171B;
+  --color-cream-50: #FFF7E6;
+  --color-cream-100: #F5E9CB;
+  --color-sand-200: #E8D6AD;
+  --color-ink-950: #15130F;
+  --color-ink-850: #221E19;
+  --color-ink-700: #514A40;
+  --color-ink-500: #7A7265;
+  
+  /* Borders & Lines */
+  --color-line: rgba(58, 29, 15, 0.18);
+  --color-line-dark: rgba(255, 247, 230, 0.14);
+  --color-line-gold: rgba(232, 214, 173, 0.35);
+
+  /* Semantic */
+  --color-success: #2E7D32;
+  --color-success-bg: #E8F5E9;
+  --color-warning: #E65100;
+  --color-warning-bg: #FFF3E0;
+  --color-error: #C5090D;
+  --color-error-bg: #FFEBEE;
+
+  /* Typography */
+  --font-display: 'Anton', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-accent: 'Caveat', cursive;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  /* Shadows - Minimal & intentional */
+  --shadow-subtle: 0 4px 12px rgba(21, 6, 4, 0.08);
+  --shadow-card: 0 8px 24px rgba(21, 6, 4, 0.12);
+  --shadow-float: 0 16px 36px rgba(21, 6, 4, 0.22);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-maroon-950);
+  color: var(--color-cream-50);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.promess-app {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ================= TYPOGRAPHY ================= */
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 0.95;
+}
+
+.font-accent {
+  font-family: var(--font-accent);
+}
+
+.display-hero {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 8vw, 7.5rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.display-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.display-sub {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* Marquee Running Strip */
+.marquee-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: var(--color-cream-50);
+  color: var(--color-ink-950);
+  border-top: 2px solid var(--color-ink-950);
+  border-bottom: 2px solid var(--color-ink-950);
+  padding: 10px 0;
+}
+
+.marquee-content {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-50%); }
+}
+
+/* ================= BUTTONS ================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  border: 1px solid transparent;
+  outline: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--color-red-600);
+  color: var(--color-cream-50);
+  border-color: var(--color-red-500);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-red-500);
+  box-shadow: 0 4px 16px rgba(223, 23, 27, 0.35);
+}
+
+.btn-dark {
+  background-color: var(--color-ink-950);
+  color: var(--color-cream-50);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-dark:hover {
+  background-color: var(--color-maroon-950);
+  border-color: var(--color-sand-200);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-cream-50);
+  border-color: var(--color-line-gold);
+}
+
+.btn-outline:hover {
+  background-color: rgba(255, 247, 230, 0.08);
+  border-color: var(--color-cream-50);
+}
+
+.btn-outline-dark {
+  background-color: transparent;
+  color: var(--color-ink-950);
+  border-color: var(--color-line);
+}
+
+.btn-outline-dark:hover {
+  background-color: rgba(33, 6, 4, 0.06);
+  border-color: var(--color-ink-950);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 1.15rem;
+}
+
+/* ================= BADGES & PILLS ================= */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.badge-live {
+  background-color: rgba(46, 125, 50, 0.2);
+  color: #4CAF50;
+  border-color: rgba(76, 175, 80, 0.4);
+}
+
+.badge-warning {
+  background-color: rgba(230, 81, 0, 0.15);
+  color: #FF9800;
+  border-color: rgba(255, 152, 0, 0.3);
+}
+
+.badge-red {
+  background-color: var(--color-red-600);
+  color: var(--color-cream-50);
+}
+
+.badge-veg {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #4CAF50;
+}
+
+.badge-nonveg {
+  background-color: #FFEBEE;
+  color: #C5090D;
+  border: 1px solid #C5090D;
+}
+
+/* ================= CARDS & CONTAINERS ================= */
+
+.card-cream {
+  background-color: var(--color-cream-50);
+  color: var(--color-ink-950);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+}
+
+.card-red {
+  background-color: var(--color-red-600);
+  color: var(--color-cream-50);
+  border: 1px solid var(--color-red-500);
+  border-radius: var(--radius-md);
+}
+
+.card-dark {
+  background-color: var(--color-ink-950);
+  color: var(--color-cream-50);
+  border: 1px solid var(--color-line-dark);
+  border-radius: var(--radius-md);
+}
+
+.card-maroon {
+  background-color: var(--color-maroon-900);
+  color: var(--color-cream-50);
+  border: 1px solid var(--color-line-gold);
+  border-radius: var(--radius-md);
+}
+
+/* Authenticity Seal Stamp */
+.stamp-seal {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3px dashed var(--color-red-600);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  animation: stamp-wobble 12s ease-in-out infinite alternate;
+}
+
+.stamp-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-red-600);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background-color: rgba(197, 9, 13, 0.04);
+}
+
+.stamp-text {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--color-red-700);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+@keyframes stamp-wobble {
+  0% { transform: rotate(-3deg); }
+  100% { transform: rotate(4deg); }
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  color: inherit;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background-color: #FFFFFF;
+  color: var(--color-ink-950);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--color-red-600);
+  box-shadow: 0 0 0 3px rgba(197, 9, 13, 0.15);
+}
+
+/* Modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(21, 6, 4, 0.82);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-container {
+  background-color: var(--color-cream-50);
+  color: var(--color-ink-950);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-md);
+  max-width: 620px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-float);
+  position: relative;
+  animation: modal-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modal-enter {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Tabular numbers for finance & dates */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Utility Containers */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(14px, 3.5vw, 24px);
+  padding-right: clamp(14px, 3.5vw, 24px);
+}
+
+/* Global overflow and image safety */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-text-size-adjust: 100%;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive tables */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.promess-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.promess-table th {
+  background-color: rgba(33, 6, 4, 0.05);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--color-line);
+  color: var(--color-ink-950);
+}
+
+.promess-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-ink-850);
+}
+
+.promess-table tr:hover td {
+  background-color: rgba(197, 9, 13, 0.03);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-maroon-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-maroon-800);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-red-600);
+}
+
+/* ==============================================================
+   RESPONSIVE DESIGN SYSTEM (ALL DEVICES: MOBILE, TABLET, DESKTOP)
+   ============================================================== */
+
+/* Navigation & Header Responsiveness */
+.mobile-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-cream-50);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.mobile-toggle-btn:hover {
+  background-color: rgba(255, 247, 230, 0.1);
+}
+
+.live-badge-desktop {
+  display: flex !important;
+}
+
+/* Horizontal scrolling tab bars with touch momentum */
+.portal-tabs-container,
+.auth-modal-tabs {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 214, 173, 0.35) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.portal-tabs-container::-webkit-scrollbar,
+.auth-modal-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.portal-tabs-container::-webkit-scrollbar-thumb,
+.auth-modal-tabs::-webkit-scrollbar-thumb {
+  background: rgba(232, 214, 173, 0.35);
+  border-radius: 4px;
+}
+
+/* 1. Large Tablets / Small Laptops (<= 1024px) */
+@media (max-width: 1024px) {
+  .live-badge-desktop {
+    display: none !important;
+  }
+}
+
+/* 2. Tablets & Mobile Landscape (<= 992px) */
+@media (max-width: 992px) {
+  .nav-desktop-links {
+    display: none !important;
+  }
+  .mobile-toggle-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-quick-portal-btn {
+    display: none !important;
+  }
+}
+
+/* 3. Tablets Portrait & Standard Mobile (<= 768px) */
+@media (max-width: 768px) {
+  /* Typography Scale */
+  .display-hero {
+    font-size: clamp(2.4rem, 10vw, 3.8rem) !important;
+    line-height: 0.95 !important;
+  }
+  .display-title {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+  }
+  .display-sub {
+    font-size: clamp(1.25rem, 6vw, 1.75rem) !important;
+  }
+
+  /* Buttons on Mobile */
+  .btn-lg {
+    padding: 12px 20px !important;
+    font-size: 1rem !important;
+  }
+
+  /* Hero Section */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .hero-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  .hero-actions .btn {
+    width: 100% !important;
+  }
+  .hero-floating-pass {
+    position: static !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 16px auto 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  /* Split Feature */
+  .split-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .split-card-left, .split-card-right {
+    padding: 26px 20px !important;
+  }
+  .split-thali-img {
+    width: clamp(190px, 55vw, 240px) !important;
+    height: clamp(190px, 55vw, 240px) !important;
+    margin: 20px auto !important;
+  }
+  .split-bottom-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .stamp-seal {
+    margin: 0 auto !important;
+  }
+
+  /* Pricing Calculator */
+  .calculator-box {
+    grid-template-columns: 1fr !important;
+  }
+  .calculator-controls {
+    padding: 24px 18px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-line) !important;
+  }
+  .calculator-summary {
+    padding: 24px 18px !important;
+  }
+
+  /* Testimonials Grid */
+  .testimonials-main-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  /* Headers in Portals */
+  .student-header-flex,
+  .admin-header-flex,
+  .counter-header-flex,
+  .footer-banner-flex {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+  }
+  .student-header-flex > div:last-child,
+  .admin-header-flex > div:last-child,
+  .counter-header-flex > div:last-child,
+  .footer-banner-flex button {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: stretch !important;
+  }
+  .student-header-flex .btn,
+  .admin-header-flex .btn,
+  .counter-header-flex .btn {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+
+  /* Counter Scanner Terminal Deck */
+  .counter-terminal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Footer Directory */
+  .footer-directory-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap: 28px !important;
+  }
+}
+
+/* 4. Small Mobile Phones (<= 540px) */
+@media (max-width: 540px) {
+  /* Brand Wordmark */
+  .brand-wordmark-title {
+    font-size: 1.5rem !important;
+  }
+  .brand-wordmark-sub {
+    font-size: 0.52rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  /* Profile Pill compact representation on phone screens */
+  .profile-pill-text {
+    display: none !important;
+  }
+  #profile-dropdown-trigger {
+    padding: 4px 8px 4px 4px !important;
+  }
+  #profile-dropdown-menu {
+    width: calc(100vw - 28px) !important;
+    max-width: 320px !important;
+    right: -6px !important;
+  }
+
+  /* Hero benefits grid 1-col */
+  .hero-benefits-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Modals */
+  .modal-backdrop {
+    padding: 10px !important;
+  }
+  .modal-container {
+    max-width: 100% !important;
+    border-radius: var(--radius-sm) !important;
+    max-height: 94vh !important;
+  }
+  .auth-form-grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Pricing Calculator option buttons */
+  .calc-diet-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .calc-duration-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Tables font and padding adjustment */
+  .promess-table th,
+  .promess-table td {
+    padding: 10px 8px !important;
+    font-size: 0.78rem !important;
+  }
+
+  /* Section vertical padding reduction for phones */
+  section {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+/* 5. Ultra-Small Devices (<= 360px - e.g. iPhone SE 1st gen, Galaxy Fold outer screen) */
+@media (max-width: 360px) {
+  .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .btn {
+    padding: 10px 14px !important;
+    font-size: 0.85rem !important;
+  }
+  .brand-wordmark-title {
+    font-size: 1.35rem !important;
+  }
+}
+
