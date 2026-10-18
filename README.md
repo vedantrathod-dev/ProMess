@@ -1,21 +1,25 @@
 # ProMess — Campus Dining & Mess Operations Platform
 
-> **Bold Flavors. Rooted in Tradition. Campus Dining Managed with Clarity.**
+> **Bold Flavors. Rooted in Tradition. Campus Dining Managed with Absolute Clarity.**  
+> **Institutional Deployment:** Ground Floor, Canteen Dining Hall, MIT ACSC, Alandi, Pune, Maharashtra  
+> **Contact:** [dining@promess.mitacsc.edu](mailto:dining@promess.mitacsc.edu) • +91 94422 10890  
 
-**ProMess** is a production-grade campus dining management and mess operations platform inspired faithfully by the authentic South Indian restaurant visual identity (oxblood/maroon backgrounds, saturated restaurant-red panels, warm ivory/cream surfaces, condensed uppercase display typography, and real regional culinary imagery).
+**ProMess** is a production-grade campus dining management and mess operations platform inspired faithfully by the authentic Indian restaurant visual identity (deep oxblood/maroon backgrounds, saturated restaurant-red panels, warm ivory/cream surfaces, bold condensed display typography, Mukta Marathi/Hindi localization, and real regional culinary imagery).
 
 ---
 
 ## 🚀 Tech Stack
 
-- **Frontend**: React 18, Vite 6, Custom Vanilla CSS Design System (Exact reference palette tokens).
-- **Backend / Database**: Node.js v20+, Firebase Client SDK (Firestore & Firebase Auth) + Offline-First Persistent Storage Engine.
-- **Hardware & QR**: `qrcode`, `html5-qrcode` (Counter camera & USB scanner integration).
-- **Icons & Delight**: `lucide-react`, `canvas-confetti`.
+- **Frontend Core**: React 18, Vite 6, Custom Vanilla CSS Design System (Exact reference palette tokens).
+- **Typography**: Google Fonts — **Anton** (Display headlines), **Mukta** (Marathi & Hindi Devanagari script), and **Plus Jakarta Sans** (UI & tables).
+- **Backend & Cloud Database**: Node.js v20+, Firebase Client SDK (Firestore & Firebase Auth) + Offline-First Persistent Storage Engine.
+- **Hardware & QR Subsystem**: `html5-qrcode` (Live 15 FPS continuous camera video decoder, multi-camera switcher, file upload scanner), `qrcode` (SVG/Canvas pass generation).
+- **Audio & Delight**: Web Audio API (Synthesized D5–A5 success chimes & A3–E3 rejection chimes), `canvas-confetti`.
+- **Testing & Tooling**: Node.js automated regression test suite (19 unit & integration tests), Playwright-ready browser suite.
 
 ---
 
-## 🎨 Design System & Reference Faithfulness
+## 🎨 Design System & Reference Tokens
 
 | Token | Hex / Value | Usage |
 |---|---|---|
@@ -26,49 +30,57 @@
 | `--color-sand-200` | `#E8D6AD` | Subheadings, border accents, tabular borders |
 | `--color-ink-950` | `#15130F` | High-contrast black cards, tables, text |
 | Display Typography | **Anton** (80px–128px) | Oversized condensed uppercase headlines |
+| Regional Typography | **Mukta** (600–800) | Marathi & Hindi Devanagari regional callouts |
 | Body Typography | **Plus Jakarta Sans** | Clean, accessible forms, tables, operational labels |
 
 ---
 
-## 🍽️ Three Separated Experiences
+## 🍽️ Distinct Platform Experiences
 
 ### 1. Public Marketing & Plan Selection
-- **Hero**: Oversized display headline *"GOOD FOOD. ZERO MESS."*, 3 compact benefit pills, interactive tilted dining pass preview with live check-in badge, running marquee strip.
-- **Our Menu**: Warm cream container with 4 horizontal food cards (*Indian*, *Chinese*, *Tea/Coffee*, *Snacks*) + Full Today's Menu modal (Lunch & Dinner schedules).
-- **Asymmetric Split**: Left cream panel with traditional Thali diagram & circular Authenticity Stamp (*"AUTHENTIC CAMPUS DINING • QUALITY SEAL • FRESH DAILY"*) + Right bold red statement panel (*"BUILT FOR STUDENTS. LOVED BY EVERYONE."*).
-- **Interactive Pricing Calculator**: Veg / Non-Veg toggle, Lunch / Dinner / Both selector, 15 / 30 / 60 / 90 days slider, daily cost breakdown, direct registration CTA.
-- **Why Students Love ProMess**: 4 circular red icon mini-cards.
-- **Food Gallery & Reviews**: Crisp dosa, filter coffee, noodles, authentic reviews, and Tamil *"பசிக்க வாங்க சாப்பிடலாம்"* fuel-up card.
+- **Hero Canvas**: Oversized headline *"GOOD FOOD. ZERO MESS."*, compact benefit pills, interactive tilted dining pass preview with live check-in badge, running marquee strip.
+- **Our Menu**: Warm cream container with 4 regional food cards:
+  1. **MAHARASHTRIAN**: Chapati, Dal Bhat, Toop, Bhaji & Koshimbir
+  2. **HYDERABADI BIRYANI**: Authentic Dum Biryani, Mirchi Ka Salan & Raita
+  3. **CHINESE**: Wok-Tossed Hakka Noodles, Fried Rice & Manchurian
+  4. **SOUTH INDIAN**: Crispy Ghee Roast Masala Dosa, Soft Idlis & Sambar
+  *(Includes Published Full Menu Modal for Lunch & Dinner).*
+- **Asymmetric Split**: Left cream panel with traditional Thali diagram & circular Authenticity Stamp (*"AUTHENTIC CAMPUS DINING • QUALITY SEAL • FRESH DAILY"*) + Right bold red statement panel (*"BUILT FOR STUDENTS. LOVED BY EVERYONE."*) with Marathi/Hindi authentic flair.
+- **Interactive Pricing Calculator**: Veg / Non-Veg toggle, Lunch / Dinner / Both selector, 15 / 30 / 60 / 90 days duration slider, daily cost breakdown, direct registration CTA.
+- **Regional Callout Card**: Localized red card featuring:
+  - **Marathi:** *भूक लागली? चला जेवूया!*
+  - **Hindi:** *भूख लगी है? आइए खाना खाते हैं!*
 
 ### 2. Student Self-Service Dining Portal
 - **Dashboard**: Active plan status, days remaining counter, today's lunch & dinner check-in state, fee status.
-- **Permanent QR Dining Pass**: Opaque token (`MESSPASS:<opaque_token>`), high-contrast scannable QR display, PNG download, and print pass layout.
+- **Permanent QR Dining Pass**: Opaque cryptographic token (`MESSPASS:<hex>`), high-contrast scannable QR display, PNG download, and print pass layout.
 - **Attendance History**: Verified meal transactions with timestamps and operator records.
-- **Fees & Receipts**: Subscription cost breakdown, payment history, serialized receipt viewer (`REC-2026-XXXX`).
-- **Leave Applications & 4-Day Extension Policy**: Apply for scheduled leave with start/end dates and reason.
+- **Fees, Dues & Receipts**: Plan cost breakdown, confirmed collections, outstanding balance tracker, serialized receipt viewer (`REC-2026-XXXX`).
+- **Leave Applications & 4-Day Extension Policy**: Apply for scheduled leave with start/end dates and reason. Leaves of 4+ consecutive days automatically extend subscription validity.
 
 ### 3. Admin & Counter Workspace
 - **Counter Scanner Terminal (`/admin/counter`)**:
-  - Live camera QR scanning with `html5-qrcode`.
-  - USB hardware scanner / keyboard barcode input.
-  - Manual student search fallback.
+  - Live continuous camera QR scanning powered by `html5-qrcode`.
+  - Multi-camera front/back & external webcam switcher (`SWITCH CAM`).
+  - Image file scanner button (`SCAN IMAGE`) for offline/screenshot decoding.
+  - USB hardware scanner & student roll number input fallback.
   - Session preselection (Lunch / Dinner based on local time).
   - Web Audio synthesized success & rejection chimes (with mute control).
   - Instant audit verification & auto-rearm in 1.8 seconds.
 - **Admin Workspace (`/admin`)**:
-  - Operational KPIs: Enrolled students, active subscriptions, dietary breakdown, live scans, confirmed collections, outstanding dues.
-  - Student Directory: Search, filter by diet/plan, pass reissue/revocation with token rotation.
-  - Attendance Manager: Date & session filtering, present breakdown, manual override, CSV export.
-  - Payment Recorder: Record payments (UPI, Net Banking, Cash) and issue official serialized receipts.
-  - Leave Approvals: 1-click approval with automatic subscription validity extension (4+ consecutive days rule).
-  - Daily Menu Publisher: Real-time updates to lunch/dinner items, non-veg addons, and timings.
-  - Security Audit Trail: Live stream of all system actions, actors, and entities.
+  - **Expiring Subscriptions Alert Panel**: Real-time detection of students with ≤ 5 days remaining, showing roll numbers, phone numbers, and 1-click 30-day renewal.
+  - **Student Directory**: Search, filter by diet/plan, pass reissue/revocation with token rotation.
+  - **Attendance Manager**: Date & session filtering, present breakdown, manual override, CSV export.
+  - **Payment & Dues Ledger**: Track full payments, partial payments, and remaining balances; record payments and issue serialized receipts.
+  - **Leave Approvals**: 1-click approval with automatic subscription validity extension (4+ consecutive days rule).
+  - **Daily Menu Publisher**: Real-time updates to lunch/dinner items, non-veg addons, and timings.
+  - **Security Audit Trail**: Live stream of all system actions, actors, and entities.
 
 ---
 
 ## 🔐 Demo Accounts (Instant 1-Click Access)
 
-Use the built-in demo switcher in the **SIGN IN** modal:
+Use the built-in demo switcher in the **SIGN IN** modal, or log in with Firebase Google / Email Auth:
 
 ### Students
 - **Karthik Raja** (24BCS108): `karthik.r@campus.edu` • Plan: Non-Veg Full Board (Both meals)
@@ -79,7 +91,7 @@ Use the built-in demo switcher in the **SIGN IN** modal:
 
 ### Staff & Management
 - **Chief Warden Dr. Ramanathan** (Admin): `admin@promess.campus` • Password: `promess2026`
-- **Murugan Swamy** (Counter Operator 1): `counter@promess.campus` • Password: `promess2026`
+- **Murugan Swamy** (Counter Operator): `counter@promess.campus` • Password: `promess2026`
 
 ---
 
@@ -107,7 +119,7 @@ node tests/test_promess.js
 Runs 19 comprehensive unit & integration tests validating:
 - OTP authentication and role-based login
 - Meal session entitlement constraint enforcement
-- (student_id, service_date, session) duplicate check-in prevention
+- `(student_id, service_date, session)` duplicate check-in prevention
 - Expired subscription and revoked pass rejection
 - 4-day qualifying leave policy extension calculations
 - Subscription expiry countdown (≤ 5 days) & 30-day renewals
@@ -127,19 +139,19 @@ ProMess is 100% configured for zero-configuration, instant deployment on **Verce
 
 ### Option A: Via GitHub (Recommended)
 1. Go to [Vercel Dashboard](https://vercel.com/new).
-2. Import your GitHub repository: `vedantrathod-dev/ProMess`.
-3. Vercel automatically detects **Vite** framework preset:
+2. Import your GitHub repository: `https://github.com/vedantrathod-dev/ProMess`.
+3. Vercel automatically detects the **Vite** framework preset:
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
    - **Install Command**: `npm install`
-4. (Optional) Add Environment Variables from `.env` in the Vercel project settings:
+4. (Optional) Add Environment Variables from `.env` in Vercel project settings:
    - `VITE_FIREBASE_API_KEY`
    - `VITE_FIREBASE_AUTH_DOMAIN`
    - `VITE_FIREBASE_PROJECT_ID`
    - `VITE_FIREBASE_STORAGE_BUCKET`
    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
    - `VITE_FIREBASE_APP_ID`
-   *(Note: Sensible default fallbacks for `messmaster-c8b62` are also built directly into the client code).*
+   *(Default fallbacks for `messmaster-c8b62` are also built directly into the client code).*
 5. Click **Deploy**. Your app will be live within seconds with full SPA routing enabled!
 
 ### Option B: Via Vercel CLI
@@ -150,14 +162,8 @@ vercel
 
 ---
 
-## 🛡️ Business Rules & Policy Details
+## 📖 System Architecture & Design Document
 
-1. **Uniqueness Constraint**:
-   `(student_id, service_date, meal_session)` is enforced in the transaction verification engine. Duplicate scans for the same session receive an immediate warning and rejection.
-2. **4-Day Leave Extension Policy**:
-   Only approved leave of **at least 4 consecutive calendar days** qualifies for plan extension. Shorter leaves (e.g. 1–3 days) can be approved for tracking but do not extend plan validity.
-3. **Price Snapshot Integrity**:
-   Subscriptions store an immutable `price_snapshot`. Changing current base rates in Settings never rewrites historical dues or confirmed payment records.
-4. **Formula Injection Protection**:
-   All CSV exports sanitize spreadsheet cells starting with `=`, `+`, `-`, or `@` to prevent remote formula execution in Microsoft Excel and Google Sheets.
+For in-depth architectural diagrams, database entity schemas, verification pipelines, hardware integration details, and security policies, refer to:
 
+👉 **[docs/architecture.md](docs/architecture.md)**
