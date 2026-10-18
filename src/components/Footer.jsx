@@ -158,7 +158,10 @@ export function Footer({ onOpenAuth, onNavigate }) {
             <div style={{ fontSize: '0.85rem', lineHeight: 1.8 }}>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', marginBottom: '8px' }}>
                 <MapPin size={16} color="#C5090D" style={{ flexShrink: 0, marginTop: '4px' }} />
-                <span>Hostel Dining Block 4, PSG Tech Campus, Coimbatore 641004</span>
+                <span>
+                  Ground Floor, Canteen Dining Hall<br />
+                  MIT ACSC, Alandi, Pune, Maharashtra
+                </span>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
                 <Phone size={14} color="#C5090D" />
@@ -166,7 +169,9 @@ export function Footer({ onOpenAuth, onNavigate }) {
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <Mail size={14} color="#C5090D" />
-                <span>dining@promess.campus.edu</span>
+                <a href="mailto:dining@promess.mitacsc.edu" style={{ color: 'inherit', textDecoration: 'none' }}>
+                  dining@promess.mitacsc.edu
+                </a>
               </div>
             </div>
           </div>

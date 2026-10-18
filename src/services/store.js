@@ -348,7 +348,7 @@ export function registerStudent({ full_name, email, mobile, college_name, dietar
     role: 'student',
     student_code: studentCode,
     full_name: full_name.trim(),
-    college_name: college_name || 'PSG Tech Campus',
+    college_name: college_name || 'MIT ACSC, Alandi',
     verified: true,
     active: true,
     created_at: new Date().toISOString()

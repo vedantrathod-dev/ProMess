@@ -490,10 +490,10 @@ export const SEED_MENUS = [
 
 export const SEED_SETTINGS = {
   mess_name: "ProMess",
-  campus_name: "PSG Tech & Campus Living",
-  campus_address: "Avinashi Road, Peelamedu, Coimbatore, Tamil Nadu 641004",
+  campus_name: "MIT ACSC Campus Dining",
+  campus_address: "Ground Floor, Canteen Dining Hall, MIT ACSC, Alandi, Pune, Maharashtra",
   contact_phone: "+91 94422 10890",
-  contact_email: "dining@promess.campus.edu",
+  contact_email: "dining@promess.mitacsc.edu",
   campus_timezone: "Asia/Kolkata",
   lunch_hours: "12:00 PM – 03:00 PM",
   dinner_hours: "07:30 PM – 10:30 PM",
