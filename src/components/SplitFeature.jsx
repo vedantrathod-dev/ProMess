@@ -117,7 +117,7 @@ export function SplitFeature({ onOpenPlans }) {
                 borderRadius: '4px',
                 letterSpacing: '0.05em'
               }}>
-                APPALAM
+                PAPAD
               </div>
               <div style={{
                 position: 'absolute',
@@ -212,15 +212,20 @@ export function SplitFeature({ onOpenPlans }) {
               LOVED BY EVERYONE.
             </h3>
 
-            {/* Tamil Authentic Flair Text directly from Reference */}
+            {/* Marathi & Hindi Authentic Flair Text */}
             <div style={{
+              fontFamily: "'Mukta', var(--font-body), sans-serif",
               fontSize: '1.25rem',
               fontWeight: 700,
               color: 'var(--color-sand-200)',
               marginBottom: '16px',
-              letterSpacing: '0.02em'
+              letterSpacing: '0.01em',
+              lineHeight: 1.35
             }}>
-              தரமான சுவை • எளிய வளாக வாழ்க்கை
+              उत्कृष्ट चव • सोपे कॅम्पस जीवन<br />
+              <span style={{ fontSize: '1rem', color: 'var(--color-cream-100)', fontWeight: 600 }}>
+                लाजवाब स्वाद • आसान कैंपस जीवन
+              </span>
             </div>
 
             <p style={{

@@ -152,15 +152,30 @@ export function Testimonials({ onOpenAuth }) {
                 FRESH & AUTHENTIC
               </div>
 
-              {/* Tamil Callout matching Reference Image */}
+              {/* Marathi & Hindi Callout */}
               <div style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '2rem',
-                lineHeight: 1.1,
-                letterSpacing: '0.04em',
-                marginBottom: '8px'
+                marginBottom: '10px'
               }}>
-                பசிக்க வாங்க<br />சாப்பிடலாம்
+                <div style={{
+                  fontFamily: "'Mukta', var(--font-display), sans-serif",
+                  fontSize: '1.85rem',
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  letterSpacing: '0.01em',
+                  color: 'var(--color-cream-50)'
+                }}>
+                  भूक लागली? चला जेवूया!
+                </div>
+                <div style={{
+                  fontFamily: "'Mukta', var(--font-body), sans-serif",
+                  fontSize: '1.25rem',
+                  fontWeight: 700,
+                  lineHeight: 1.25,
+                  color: 'var(--color-sand-200)',
+                  marginTop: '4px'
+                }}>
+                  भूख लगी है? आइए खाना खाते हैं!
+                </div>
               </div>
 
               <p style={{
