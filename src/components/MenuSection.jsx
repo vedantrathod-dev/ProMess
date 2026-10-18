@@ -6,56 +6,57 @@ export function MenuSection({ menus }) {
   const [activeSessionTab, setActiveSessionTab] = useState('lunch');
 
   const lunchMenu = menus.find(m => m.meal_session === 'lunch') || {
-    title: "Chettinad & Traditional Tamil Feast",
+    title: "Maharashtrian Special Thali (दुपारचे जेवण)",
     items: [
-      "Steamed Ponni Boiled Rice & Fragrant Jeera Rice",
-      "Traditional Drumstick & Shallot Sambar",
-      "Pepper Rasam & Thick Curd",
-      "Vazhaipoo Poriyal & Potato Roast",
-      "Crispy Urad Appalam & Mango Thokku Pickle",
-      "Payasam Dessert (Moong Dal & Jaggery)"
+      "Garam Garam Chapati / Poli (Soft Fresh Wheat Flatbreads)",
+      "Varan Bhat (Steamed Basmati Rice with Dal & Suddh Sajuk Tup / Ghee)",
+      "Batata Sukhi Bhaji & Seasonal Special Sabzi",
+      "Koshimbir (Cucumber & Roasted Peanut Salad) & Lasun Thecha",
+      "Khamang Roasted Papad & Limbu Lonche (Lemon Pickle)",
+      "Sweet Gulab Jamun / Puran Poli Dessert"
     ],
-    non_veg_addon: "Chettinad Spicy Chicken Sukka & Egg Masala",
+    non_veg_addon: "Kolhapuri Spicy Chicken Sukka & Egg Curry",
     serving_hours: "12:00 PM – 03:00 PM"
   };
 
   const dinnerMenu = menus.find(m => m.meal_session === 'dinner') || {
-    title: "Hot Tiffin & Biryani Night",
+    title: "Hyderabadi Dum Biryani, Chinese & South Indian (रात्रीचे जेवण)",
     items: [
-      "Crispy Ghee Roast Dosa & Fluffy Idlis",
-      "Madurai Style Veg Kothu Parotta",
-      "Spicy Coconut Chutney & Tomato Kara Chutney",
-      "Mixed Vegetable Kurma & Sambar",
-      "Hot Masala Milk with Badam & Cardamom"
+      "Royal Hyderabadi Dum Biryani with Zaffrani Basmati",
+      "Authentic Mirchi Ka Salan & Chilled Boondi Raita",
+      "Crispy Ghee Roast Masala Dosa & Fluffy Steamed Idlis",
+      "Traditional Drumstick Sambar & Fresh Coconut Chutney",
+      "Chinese Wok-Tossed Veg Hakka Noodles & Manchurian",
+      "Hot Masala Milk with Badam, Kesar & Elaichi"
     ],
-    non_veg_addon: "Dindigul Style Seeraga Samba Chicken Biryani",
+    non_veg_addon: "Authentic Hyderabadi Chicken Dum Biryani Special",
     serving_hours: "07:30 PM – 10:30 PM"
   };
 
   const foodCards = [
     {
-      category: "INDIAN",
-      tagline: "Turn Up The Flavor, Turn Up The Fun",
-      subtitle: "Traditional Thali, Sambar, Poriyal & Rice",
-      image: "/images/south_indian_thali.jpg"
+      category: "MAHARASHTRIAN",
+      tagline: "Gharche Jevan, अस्सल चव",
+      subtitle: "Chapati, Dal Bhat, Toop, Bhaji & Koshimbir",
+      image: "/images/maharashtra_thali.jpg"
+    },
+    {
+      category: "HYDERABADI BIRYANI",
+      tagline: "Dum Pukht Aroma & Royal Spices",
+      subtitle: "Authentic Dum Biryani, Mirchi Ka Salan & Raita",
+      image: "/images/hero_biryani.jpg"
     },
     {
       category: "CHINESE",
       tagline: "Smack Like You Mean It",
-      subtitle: "Hakka Noodles, Fried Rice & Manchurian",
+      subtitle: "Wok Hakka Noodles, Fried Rice & Manchurian",
       image: "/images/chinese_noodles.jpg"
     },
     {
-      category: "TEA / COFFEE",
-      tagline: "Legendary Filter Coffee & Masala Chai",
-      subtitle: "Fresh Kumbakonam Degree Coffee",
-      image: "/images/filter_coffee.jpg"
-    },
-    {
-      category: "SNACKS",
-      tagline: "Crispy, Crunchy, Can't Stop",
-      subtitle: "Golden Samosas, Medu Vada & Bajji",
-      image: "/images/samosas_snacks.jpg"
+      category: "SOUTH INDIAN",
+      tagline: "Crispy, Golden & Steaming Hot",
+      subtitle: "Ghee Roast Masala Dosa, Soft Idli & Sambar",
+      image: "/images/crispy_dosa.jpg"
     }
   ];
 

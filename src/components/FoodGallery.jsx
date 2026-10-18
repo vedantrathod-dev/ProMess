@@ -3,14 +3,14 @@ import React from 'react';
 export function FoodGallery() {
   const images = [
     {
-      src: '/images/crispy_dosa.jpg',
-      title: 'Golden Ghee Roast Dosa',
-      subtitle: 'Crispy edges & soft center'
+      src: '/images/maharashtra_thali.jpg',
+      title: 'Maharashtrian Chapati Dal Bhat',
+      subtitle: 'Poli, varan bhat, ghee & batata bhaji'
     },
     {
-      src: '/images/filter_coffee.jpg',
-      title: 'Kumbakonam Degree Filter Coffee',
-      subtitle: 'Frothy, aromatic, slow-brewed'
+      src: '/images/hero_biryani.jpg',
+      title: 'Royal Hyderabadi Dum Biryani',
+      subtitle: 'Slow-cooked dum basmati & rich spices'
     },
     {
       isTextCard: true,
@@ -18,9 +18,9 @@ export function FoodGallery() {
       sub: 'PROMESS CAMPUS DINING'
     },
     {
-      src: '/images/chinese_noodles.jpg',
-      title: 'Wok-Tossed Hakka Noodles',
-      subtitle: 'Fresh crunchy vegetables'
+      src: '/images/crispy_dosa.jpg',
+      title: 'Golden Ghee Roast Dosa',
+      subtitle: 'Crispy edges & traditional sambar'
     }
   ];
 

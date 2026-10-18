@@ -457,16 +457,16 @@ export const SEED_MENUS = [
     id: "menu_today_lunch",
     service_date: getTodayDateString(),
     meal_session: "lunch",
-    title: "Chettinad & Traditional Tamil Feast",
+    title: "Maharashtrian Special Thali (दुपारचे जेवण)",
     items: [
-      "Steamed Ponni Boiled Rice & Fragrant Jeera Rice",
-      "Traditional Drumstick & Shallot Sambar",
-      "Pepper Rasam & Curd with tempered Mustard",
-      "Vazhaipoo Poriyal & Potato Roast",
-      "Crispy Urad Appalam & Mango Thokku Pickle",
-      "Payasam Dessert (Moong Dal & Jaggery)"
+      "Garam Garam Chapati / Poli (Soft Fresh Wheat Flatbreads)",
+      "Varan Bhat (Steamed Basmati Rice with Dal & Suddh Sajuk Tup / Ghee)",
+      "Batata Sukhi Bhaji & Seasonal Special Sabzi",
+      "Koshimbir (Cucumber & Roasted Peanut Salad) & Lasun Thecha",
+      "Khamang Roasted Papad & Limbu Lonche (Lemon Pickle)",
+      "Sweet Gulab Jamun / Puran Poli Dessert"
     ],
-    non_veg_addon: "Chettinad Spicy Chicken Sukka & Egg Masala",
+    non_veg_addon: "Kolhapuri Spicy Chicken Sukka & Egg Curry",
     serving_hours: "12:00 PM – 03:00 PM",
     published: true
   },
@@ -474,15 +474,16 @@ export const SEED_MENUS = [
     id: "menu_today_dinner",
     service_date: getTodayDateString(),
     meal_session: "dinner",
-    title: "Hot Tiffin & Biryani Night",
+    title: "Hyderabadi Dum Biryani, Chinese & South Indian (रात्रीचे जेवण)",
     items: [
-      "Crispy Ghee Roast Dosa & Fluffy Idlis",
-      "Madurai Style Veg Kothu Parotta",
-      "Spicy Coconut Chutney & Tomato Kara Chutney",
-      "Mixed Vegetable Kurma & Sambar",
-      "Hot Masala Milk with Badam & Cardamom"
+      "Royal Hyderabadi Dum Biryani with Zaffrani Basmati",
+      "Authentic Mirchi Ka Salan & Chilled Boondi Raita",
+      "Crispy Ghee Roast Masala Dosa & Fluffy Steamed Idlis",
+      "Traditional Drumstick Sambar & Fresh Coconut Chutney",
+      "Chinese Wok-Tossed Veg Hakka Noodles & Manchurian",
+      "Hot Masala Milk with Badam, Kesar & Elaichi"
     ],
-    non_veg_addon: "Dindigul Style Seeraga Samba Chicken Biryani",
+    non_veg_addon: "Authentic Hyderabadi Chicken Dum Biryani Special",
     serving_hours: "07:30 PM – 10:30 PM",
     published: true
   }
